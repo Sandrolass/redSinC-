@@ -9,9 +9,13 @@
 using namespace std;
 
 //--
+
+
+
 double activationFunctionRelu(double x){
     return max(0.0,x);
 }
+
 double activationFunctionSigmoid(double x){
     return (1/(1+exp(-x)));
 }
@@ -115,7 +119,16 @@ double biasI[6],double biash1[5], double biash2[4]){
    return  res = forwardOut(outputValsH2,output,outputLayer,bias4);
 } */ 
 
+double runAll(double in , double inputWeights[6],double bias1[6],double hiddenLayer1[5][6],double bias2[5],
+            double hiddenLayer2[4][5],double bias3[4],double outputLayer[4], double bias4 ){
+                double outputValsI[6],outputValsH1[5],outputValsH2[4];
+                double output;
+                forwardInput(in,outputValsI,inputWeights,bias1);
+                forwardh1(outputValsI,outputValsH1,hiddenLayer1,bias2);
+                forwardh2(outputValsH1,outputValsH2,hiddenLayer2,bias3);
+                return  forwardOut(outputValsH2,output,outputLayer,bias4);
 
+            }
 
 
 
@@ -137,23 +150,30 @@ int main(){
     double bias4 =-1.3076416;
     double inputLayer[6], hiddenLayer1[5][6],hiddenLayer2[4][5],outputLayer[4];
     bias4 = loadData(inputLayer,hiddenLayer1,hiddenLayer2,outputLayer,bias1,bias2,bias3);
-    double inputValsI;
-    double outputValsI[6],outputValsH1[5],outputValsH2[4];
-    double output,res;
+    //double inputValsI;
+    //double outputValsI[6],outputValsH1[5],outputValsH2[4];
+    //double output,res;
+    double res;
     string cadena;
     ifstream newfile("x.txt");
-    ofstream seconfile("res.txt");
-    for(int i=0;i<1000;i++){
+    ofstream secondfile("res.txt");
+    /*for(int i=0;i<1000;i++){
         newfile>>cadena;
         forwardInput(stod(cadena),outputValsI,inputLayer,bias1);
         forwardh1(outputValsI,outputValsH1,hiddenLayer1,bias2);
         forwardh2(outputValsH1,outputValsH2,hiddenLayer2,bias3);
         res = forwardOut(outputValsH2,output,outputLayer,bias4);
-        seconfile << res;
-        seconfile << endl;
+        secondfile << res;
+        secondfile << endl;
         cout<<res*2-1<<endl;
-    }
-   
+    }*/
+   for(int i=0;i<1000;i++){
+       newfile>>cadena;
+       res =  runAll(stod(cadena),inputLayer,bias1,hiddenLayer1,bias2,hiddenLayer2,bias3,outputLayer,bias4);
+       secondfile << res;
+       secondfile << endl;
+       cout<<res*2-1<<endl;
+   }
 
     
 
